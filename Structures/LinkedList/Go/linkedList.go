@@ -23,6 +23,14 @@ type LinkedList struct {
 	size int
 }
 
+func (l *LinkedList) Head() *Node {
+	return l.head
+}
+
+func (l *LinkedList) Tail() *Node {
+	return l.tail
+}
+
 func (l *LinkedList) Size() int {
 	return l.size
 }
@@ -91,4 +99,24 @@ func (l *LinkedList) Remove(index int) bool {
 	return true
 }
 
-//todo add Insert, Head, Tail method
+func (l *LinkedList) Insert(value, index int) error {
+	node, err := l.Get(index)
+	if err != nil {
+		return err
+	}
+	if node.Prev() == nil {
+		l.Prepend(value)
+		return nil
+	}
+	if node.Next() == nil {
+		l.Append(value)
+		return nil
+	}
+	n := new(Node)
+	n.Value = value
+	n.prev = node.Prev()
+	n.next = node
+	node.Prev().next = n
+	node.prev = n
+	return nil
+}
